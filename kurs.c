@@ -13,7 +13,11 @@ double F3(double x);  // ареа-синус (обратный гипербол�
 
 double* generating_values(double xmin, double dx);  // генерирует массив значений x
 double* random_values(int N, double xmin, double xmax);  // генерирует уникальные случайные значения
-void result(FILE* outputFile, double x, int func_num, double (*func)(double));  // выводит результат в файл
+double result(FILE* outputFile, double x, int func_num, double (*func)(double)) {
+    double result_value = func(x);  // Вычисляем значение функции
+    fprintf(outputFile, "|%.5lf\t|%.5lf\t|\n", x, result_value);  // Вывод в файл
+    return result_value;  // Возвращаем результат вычисления функции
+}
 double find_min(double (*func)(double), double* values, int N);  // находит минимальное значение
 double find_max(double (*func)(double), double* values, int N);  // находит максимальное значение
 double calculate_abs_difference(double (*func)(double), double* values, int N);  // вычисляет модуль разности
@@ -51,29 +55,30 @@ void menu(FILE* outputFile) {
         scanf("%d", &choice);  // выбор пункта меню
         switch (choice) {
             case 1:
-                printf("Выберите функцию:\n1 - F1 (линейная)\n2 - F2 (кусочная)\n3 - F3 (ареа-синус)\n");
-                scanf("%d", &func_choice);  // выбор функции
-                printf("Введите значение x:\n");
-                scanf("%lf", &x);  // ввод значения x
-                fprintf(outputFile, "|x\t\t|F%d(x)\t\t|\n", func_choice);  // вывод в файл
-                fprintf(outputFile, "-----------------------\n");
-                switch (func_choice) {
-                case 1:
-                    printf("F1(%.5lf) = %.5lf\n", x, F1(x));  // вычисление и вывод результата для F1
-                    fprintf(outputFile, "|%.5lf\t|%.5lf\t|\n", x, F1(x));
-                    break;
-                case 2:
-                    printf("F2(%.5lf) = %.5lf\n", x, F2(x));  // вычисление и вывод результата для F2
-                    fprintf(outputFile, "|%.5lf\t|%.5lf\t|\n", x, F2(x));
-                    break;
-                case 3:
-                    printf("F3(%.5lf) = %.5lf\n", x, F3(x));  // вычисление и вывод результата для F3
-                    fprintf(outputFile, "|%.5lf\t|%.5lf\t|\n", x, F3(x));
-                    break;
-                default:
-                    printf("Некорректный выбор функции.\n");
-                }
-                break;
+    printf("Выберите функцию:\n1 - F1 (линейная)\n2 - F2 (кусочная)\n3 - F3 (ареа-синус)\n");
+    scanf("%d", &func_choice);  // выбор функции
+    printf("Введите значение x:\n");
+    scanf("%lf", &x);  // ввод значения x
+    fprintf(outputFile, "|x\t\t|F%d(x)\t\t|\n", func_choice);  // вывод в файл
+    fprintf(outputFile, "-----------------------\n");
+    double result_value;
+    switch (func_choice) {
+    case 1:
+        result_value = result(outputFile, x, func_choice, F1);  // Вызов функции и получение результата
+        printf("F1(%.5lf) = %.5lf\n", x, result_value);  // Вывод результата на экран
+        break;
+    case 2:
+        result_value = result(outputFile, x, func_choice, F2);  // Вызов функции и получение результата
+        printf("F2(%.5lf) = %.5lf\n", x, result_value);  // Вывод результата на экран
+        break;
+    case 3:
+        result_value = result(outputFile, x, func_choice, F3);  // Вызов функции и получение результата
+        printf("F3(%.5lf) = %.5lf\n", x, result_value);  // Вывод результата на экран
+        break;
+    default:
+        printf("Некорректный выбор функции.\n");
+    }
+    break;
             case 2:
                 printf("Выберите функцию:\n1 - F1 (линейная)\n2 - F2 (кусочная)\n3 - F3 (ареа-синус)\n");
                 scanf("%d", &func_choice);  // выбор функции
